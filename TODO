@@ -1,0 +1,6 @@
+reading files.
+first read the num of ants, save it a new instance of anthil struct
+then add nodes/rooms
+set their connections
+
+you know what? I have to first deal with what algorithm I will use.
