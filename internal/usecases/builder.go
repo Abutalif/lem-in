@@ -1,14 +1,11 @@
 package usecases
 
-type input interface{
-}
+import "lem-in/internal/entities"
 
 type Builder struct {
-	in input
+	anthill entities.Anthill
 }
 
-func NewBuilder(in input) Builder {
-	return Builder{
-		in:in,
-	}
+func NewBuilder() Builder {
+	return Builder{anthill: entities.Anthill{}}
 }

@@ -22,8 +22,3 @@ const (
 	Start
 	End
 )
-
-func New(content string) *Anthill {
-	newHill := Anthill{}
-	return &newHill
-}
