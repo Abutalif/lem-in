@@ -1,7 +1,7 @@
-package models
+package entities
 
 type Anthill struct {
-	Rooms  map[string]Room
+	Rooms  []*Room
 	AntNum uint
 }
 
