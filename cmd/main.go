@@ -15,11 +15,5 @@ func main() {
 	}
 
 	cli := CLI.NewCLI()
-	cli.SaveData(args[0])
-	// content, err := os.ReadFile(args[0])
-	// if err != nil {
-	// 	fmt.Println("ERROR: file not found")
-	// 	return
-	// }
-	// fmt.Println(string(content))
+	cli.Run(args[0])
 }

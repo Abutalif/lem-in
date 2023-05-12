@@ -1,6 +1,13 @@
-reading files.
-first read the num of ants, save it a new instance of anthil struct
-then add nodes/rooms
-set their connections
+Reading:
+    how to read:
+        - comments,
+        - start,
+        - end
+    how and when to change readState?
+        from readRooms to read Tunnels
 
-you know what? I have to first deal with what algorithm I will use.
+
+
+Thoughts:
+they only way to see if to change read mode is to check fromat. But I also know that read state changes sequentally: ants-> rooms-> connections.
+I could have added read regexp for each case and then match its case
