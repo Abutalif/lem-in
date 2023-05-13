@@ -15,5 +15,8 @@ func main() {
 	}
 
 	cli := CLI.NewCLI()
-	cli.Run(args[0])
+	err := cli.Run(args[0])
+	if err != nil {
+		fmt.Println(err)
+	}
 }

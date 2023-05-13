@@ -1,13 +1,5 @@
-Reading:
-    how to read:
-        - comments,
-        - start,
-        - end
-    how and when to change readState?
-        from readRooms to read Tunnels
+Solving:
+    how should I solve the puzzle??
 
-
-
-Thoughts:
-they only way to see if to change read mode is to check fromat. But I also know that read state changes sequentally: ants-> rooms-> connections.
-I could have added read regexp for each case and then match its case
+Dual CMD:
+    i might create two separate mains

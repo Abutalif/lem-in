@@ -1,7 +1,7 @@
 package entities
 
 type Anthill struct {
-	Rooms  []*Room
+	Rooms  map[string]*Room
 	AntNum uint
 }
 
@@ -10,14 +10,14 @@ type Room struct {
 	X           int
 	Y           int
 	Visited     bool
-	Kind        Kind
+	Kind        RoomKind
 	Connections []*Room
 }
 
-type Kind uint8
+type RoomKind uint8
 
 const (
-	Unknown Kind = iota
+	Unknown RoomKind = iota
 	Regular
 	Start
 	End

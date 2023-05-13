@@ -13,31 +13,44 @@ import (
 )
 
 const (
-	ants byte = iota
+	comment byte = iota
+	ants
 	rooms
 	tunnels
 )
 
 type CLI struct {
-	builder   usecases.Builder
-	readState byte
-	inout     string
+	builder    usecases.Builder
+	roomKind   entities.RoomKind
+	readState  byte
+	startFound bool
+	endFound   bool
+	inout      string
 }
 
+// type runtimeData struct {
+// 	roomKind  entities.RoomKind
+// 	readState byte
+// 	read
+// }
+
 func NewCLI() *CLI {
-	builder := usecases.NewBuilder()
 	return &CLI{
-		builder:   builder,
-		readState: ants,
+		builder:    usecases.NewBuilder(),
+		roomKind:   entities.Regular,
+		readState:  ants,
+		startFound: false,
+		endFound:   false,
 	}
 }
 
 func (c *CLI) Run(filename string) error {
 	var err error
-	if err = c.readData(filename); err != nil {
+	if err = c.saveData(filename); err != nil {
 		return err
 	}
 
+	// c.builder.ShowAnthill()
 	// TODO
 	if err = c.solve(); err != nil {
 		return err
@@ -50,9 +63,7 @@ func (c *CLI) Run(filename string) error {
 }
 
 // ***HERE***
-func (c *CLI) readData(filename string) error {
-	var roomKind entities.Kind
-
+func (c *CLI) saveData(filename string) error {
 	file, err := os.Open(filename)
 	if err != nil {
 		return err
@@ -60,8 +71,23 @@ func (c *CLI) readData(filename string) error {
 	defer file.Close()
 
 	fileScan := bufio.NewScanner(file)
+	var prevState byte
 	for fileScan.Scan() {
 		line := fileScan.Text()
+		if len(line) == 0 {
+			return errors.New("ERROR: empty entry line")
+		}
+		if strings.HasPrefix(line, "#") {
+			if line == "##start" {
+				c.roomKind = entities.Start
+				c.startFound = true
+			} else if line == "##end" {
+				c.roomKind = entities.End
+				c.endFound = true
+			}
+			prevState = c.readState
+			c.readState = comment
+		}
 
 		switch c.readState {
 		case ants:
@@ -76,15 +102,34 @@ func (c *CLI) readData(filename string) error {
 				return errors.New("ERROR: repeated rooms")
 			}
 
-			// error: creates only regular room. How to create start/end?
-			if err = c.builder.CreateRoom(line, roomKind); err != nil {
+			if len(strings.Split(line, " ")) != 3 {
+				c.readState = tunnels // feels like this is erronous. should check it
+				continue
+			}
+
+			if err = c.builder.CreateRoom(line, c.roomKind); err != nil {
 				return err
 			}
+
+			if c.roomKind != entities.Regular {
+				c.roomKind = entities.Regular
+			}
 		case tunnels:
+			if err = c.builder.CreateTunnel(line); err != nil {
+				return err
+			}
+
+		case comment:
+			c.readState = prevState
 		default:
 			return fmt.Errorf("ERROR: invalid read mode")
 		}
+
 		c.inout += line + "\n"
+
+	}
+	if !c.startFound || !c.endFound {
+		return errors.New("ERROR: no data start or end room found")
 	}
 
 	return nil
