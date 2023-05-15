@@ -1,3 +1,5 @@
 package entities
 
-type Solution struct{}
+type Solution struct {
+	Path []*Room
+}

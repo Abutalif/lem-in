@@ -22,3 +22,21 @@ const (
 	Start
 	End
 )
+
+func (a *Anthill) GetStart() *Room {
+	for _, room := range a.Rooms {
+		if room.Kind == Start {
+			return room
+		}
+	}
+	return nil
+}
+
+func (a *Anthill) GetEnd() *Room {
+	for _, room := range a.Rooms {
+		if room.Kind == End {
+			return room
+		}
+	}
+	return nil
+}

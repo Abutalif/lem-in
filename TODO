@@ -3,3 +3,24 @@ Solving:
 
 Dual CMD:
     i might create two separate mains
+
+
+
+I was thinking about making the most naive solution.
+Turns out I am trying to implement Edmund-Karps, which is probably far from naive solution.
+Now what I can do is come up for some kind of algorythm. The most naive one.
+Suppose I have a start room. I will visit its neighbors. And then Visit its neighbors' neighbors.
+So at the end I should have a list of references that are ordered rooms from start to end.
+Right now I assume for a naive solution, a single shortest path should be found,
+and then appended to a solution.
+
+
+
+I am a bit unsure about structure of my entites for solution.
+Right now my solution is just a list of Path that lead from start to end.
+To be honest, I think its an overkill, that is it just makes my code bloated.
+What really a solution must represent is distribution of ants on each valid path.
+So the most efficent travelsal is obtained. Should my Paths look like linked list???
+At the end of the day, my solutions should represent a set of instructions on how ants must move.
+
+Ok. I think its enough for today.

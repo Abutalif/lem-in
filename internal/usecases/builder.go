@@ -45,7 +45,7 @@ func (b *Builder) CreateRoom(line string, kind entities.RoomKind) error {
 func (b *Builder) checkData(line string) (string, int, int, error) {
 	roomData := strings.Split(line, " ")
 	if len(roomData) != 3 {
-		return "", 0, 0, errors.New("ERROR: invalid room format - wrong num of entires")
+		return "", 0, 0, errors.New("ERROR: invalid room format - wrong number of entires")
 	}
 
 	x, err := strconv.Atoi(roomData[1])

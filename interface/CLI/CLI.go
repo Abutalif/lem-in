@@ -50,8 +50,7 @@ func (c *CLI) Run(filename string) error {
 		return err
 	}
 
-	// c.builder.ShowAnthill()
-	// TODO
+	// ***HERE***
 	if err = c.solve(); err != nil {
 		return err
 	}
