@@ -1,5 +1,9 @@
 package entities
 
-type Solution struct {
-	Path []*Room
+type Solution []*Path
+
+type Path struct {
+	Current *Room
+	Next    *Path
+	// HasAnt  bool
 }
