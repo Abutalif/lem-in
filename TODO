@@ -14,3 +14,5 @@ In that case, can the bidirectionality be used for better paths?? Yes.
 The question is then, how should I limit the number of path, so my ants won't be running in circles??
 
 Long story short, I have to learn Dijkstra algorithm.
+
+might as well think of it as of real-life nature mechanics, where an ants use scents to control the collony.
