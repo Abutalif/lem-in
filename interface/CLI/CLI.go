@@ -21,6 +21,7 @@ const (
 
 type CLI struct {
 	builder    usecases.Builder
+	pathfinder usecases.Pathfinder
 	roomKind   entities.RoomKind
 	readState  byte
 	startFound bool
@@ -28,15 +29,10 @@ type CLI struct {
 	inout      string
 }
 
-// type runtimeData struct {
-// 	roomKind  entities.RoomKind
-// 	readState byte
-// 	read
-// }
-
 func NewCLI() *CLI {
 	return &CLI{
 		builder:    usecases.NewBuilder(),
+		pathfinder: usecases.NewPathfinder(),
 		roomKind:   entities.Regular,
 		readState:  ants,
 		startFound: false,
@@ -49,7 +45,7 @@ func (c *CLI) Run(filename string) error {
 	if err = c.saveData(filename); err != nil {
 		return err
 	}
-
+	c.builder.ShowAnthill()
 	// ***HERE***
 	if err = c.solve(); err != nil {
 		return err
@@ -134,8 +130,14 @@ func (c *CLI) saveData(filename string) error {
 	return nil
 }
 
-// TODO
 func (c *CLI) solve() error {
+	paths := c.pathfinder.Find(c.builder.Anthill())
+	if len(paths) < 1 {
+		return errors.New("ERROR: no path found")
+	}
+	for _, p := range paths {
+		p.PrintList()
+	}
 	return nil
 }
 

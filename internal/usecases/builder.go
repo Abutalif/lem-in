@@ -21,6 +21,10 @@ func NewBuilder() Builder {
 	}
 }
 
+func (b *Builder) Anthill() *entities.Anthill {
+	return b.anthill
+}
+
 func (b *Builder) SetAnts(num uint) {
 	b.anthill.AntNum = num
 }
@@ -92,7 +96,7 @@ func (b *Builder) CreateTunnel(line string) error {
 	if !has1 || !has2 {
 		return errors.New("ERROR: invalid tunnel info - tunnel to nonexisting room")
 	}
-	// warning: biderectional tunnel might have error when ants will move from neighboring rooms
+
 	room1.Connections = append(room1.Connections, room2)
 	room2.Connections = append(room2.Connections, room1)
 

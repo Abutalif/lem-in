@@ -8,6 +8,6 @@ type Presenter struct {
 
 func NewPresenter(out output) Presenter {
 	return Presenter{
-		out:out,
+		out: out,
 	}
 }

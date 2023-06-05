@@ -1,18 +1,11 @@
-Dual CMD. One for CLI. One for web.
-
-Curent process:
-Working with a solver. The idea is to add rooms to a path, only if it reaches end.
-
-An interesting case. Suppose my start is connected to single room. This room is then branches out to two other rooms, each leading to the end room.
-The path through the first branch is shorter.
-So, as the ants start moving, it might be worthwile to start sending ants through a second branch.
-
-So the question is how to find all the paths?
-
-I should also keep in mind that my links between rooms is bidirectional.
-In that case, can the bidirectionality be used for better paths?? Yes.
-The question is then, how should I limit the number of path, so my ants won't be running in circles??
-
-Long story short, I have to learn Dijkstra algorithm.
-
-might as well think of it as of real-life nature mechanics, where an ants use scents to control the collony.
+1. Dual CMD. One for CLI. One for web. 
+2. Builder must check if start and end are not adjacent (not sure about that)
+3. Check all endcases:
+    - No end
+    - No start
+    - No connection
+4. See Edmonds–Karp algorithm and Dinic's algorithm.
+5. Create a folder in usecases named pathfinders, which contain packages named after used algorythm.
+    - Each file defines a struct that fits to the pathFinder interface.
+    - The pathfinder file defines the interface for pathFinders. It also manages which algorithm to chose, based on the graph provided.
+6. Seems my builder cannot register all connections. Should check it.
