@@ -2,7 +2,6 @@ package usecases
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -47,7 +46,7 @@ func (b *Builder) CreateRoom(line string, kind entities.RoomKind) error {
 }
 
 func (b *Builder) checkData(line string) (string, int, int, error) {
-	roomData := strings.Split(line, " ")
+	roomData := strings.Fields(line)
 	if len(roomData) != 3 {
 		return "", 0, 0, errors.New("ERROR: invalid room format - wrong number of entires")
 	}
@@ -57,33 +56,12 @@ func (b *Builder) checkData(line string) (string, int, int, error) {
 		return "", 0, 0, errors.New("ERROR: invalid room format - incorrect x coord")
 	}
 
-	y, err := strconv.Atoi(roomData[1])
+	y, err := strconv.Atoi(roomData[2])
 	if err != nil {
 		return "", 0, 0, errors.New("ERROR: invalid room format - incorrect y coord")
 	}
 
 	return roomData[0], x, y, nil
-}
-
-func (b *Builder) ShowAnthill() {
-	fmt.Println("AntNum:", b.anthill.AntNum)
-	fmt.Println("Rooms:")
-	for _, val := range b.anthill.Rooms {
-		var kind string
-		switch val.Kind {
-		case entities.Start:
-			kind = "start"
-		case entities.Regular:
-			kind = "regular"
-		case entities.End:
-			kind = "end"
-		}
-		fmt.Printf("%v - %v, connected to:\n", val.Name, kind)
-		for _, cons := range val.Connections {
-			fmt.Printf("%v, ", cons.Name)
-		}
-		fmt.Printf("\n\n")
-	}
 }
 
 func (b *Builder) CreateTunnel(line string) error {

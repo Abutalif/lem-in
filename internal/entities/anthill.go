@@ -1,5 +1,7 @@
 package entities
 
+import "fmt"
+
 type Anthill struct {
 	Rooms  map[string]*Room
 	AntNum uint
@@ -39,4 +41,25 @@ func (a *Anthill) GetEnd() *Room {
 		}
 	}
 	return nil
+}
+
+func (a *Anthill) Show() {
+	fmt.Println("AntNum:", a.AntNum)
+	fmt.Println("Rooms:")
+	for _, val := range a.Rooms {
+		var kind string
+		switch val.Kind {
+		case Start:
+			kind = "start"
+		case Regular:
+			kind = "regular"
+		case End:
+			kind = "end"
+		}
+		fmt.Printf("%v - %v - x:%v - y:%v , connected to:\n", val.Name, kind, val.X, val.Y)
+		for _, cons := range val.Connections {
+			fmt.Printf("%v, ", cons.Name)
+		}
+		fmt.Printf("\n\n")
+	}
 }

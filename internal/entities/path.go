@@ -19,15 +19,6 @@ func (n *Node) GetLast() *Node {
 	return n.Next.GetLast()
 }
 
-// func (n *Node) PrintList() {
-// 	start := n
-// 	for start.Next != nil {
-// 		fmt.Printf("%v <- ", start.Current.Name)
-// 		start = start.Next
-// 	}
-// 	fmt.Println()
-// }
-
 func (n *Node) PrintList() {
 	start := n
 	for start.Next != nil {

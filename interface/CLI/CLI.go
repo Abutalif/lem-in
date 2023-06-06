@@ -45,8 +45,7 @@ func (c *CLI) Run(filename string) error {
 	if err = c.saveData(filename); err != nil {
 		return err
 	}
-	c.builder.ShowAnthill()
-	// ***HERE***
+	c.builder.Anthill().Show()
 	if err = c.solve(); err != nil {
 		return err
 	}
@@ -57,7 +56,6 @@ func (c *CLI) Run(filename string) error {
 	return nil
 }
 
-// ***HERE***
 func (c *CLI) saveData(filename string) error {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -98,7 +96,8 @@ func (c *CLI) saveData(filename string) error {
 			}
 
 			if len(strings.Split(line, " ")) != 3 {
-				c.readState = tunnels // feels like this is erronous. should check it
+				c.readState = tunnels
+				c.builder.CreateTunnel(line)
 				continue
 			}
 
@@ -109,11 +108,12 @@ func (c *CLI) saveData(filename string) error {
 			if c.roomKind != entities.Regular {
 				c.roomKind = entities.Regular
 			}
+			fmt.Printf("writing room: %v\n", line)
 		case tunnels:
 			if err = c.builder.CreateTunnel(line); err != nil {
 				return err
 			}
-
+			fmt.Printf("writing tunnel: %v\n", line)
 		case comment:
 			c.readState = prevState
 		default:
@@ -143,5 +143,7 @@ func (c *CLI) solve() error {
 
 // TODO
 func (c *CLI) writeResult() error {
+	// first fmt.Println(c.inout)
+	// the data will be recieved in the format that
 	return nil
 }

@@ -11,15 +11,13 @@ type Pathfinder interface {
 }
 
 type simple struct {
-	// paths []entities.Node
 	end *entities.Room
 }
 
 func NewPathfinder() Pathfinder {
-	return &simple{} //paths: make([]entities.Node, 0)
+	return &simple{}
 }
 
-// finishing
 func (s *simple) Find(colony *entities.Anthill) []*entities.Node {
 	start := colony.GetStart()
 	start.Visited = true
@@ -46,7 +44,6 @@ func (s *simple) Find(colony *entities.Anthill) []*entities.Node {
 
 func (s *simple) checkNeighbors(current *entities.Room) *entities.Node {
 	current.Visited = true
-	// fmt.Printf("visiting: %v\n", current.Name)
 	for _, neighbor := range current.Connections {
 		if !neighbor.Visited {
 			if neighbor.Kind == entities.End {
