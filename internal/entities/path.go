@@ -23,6 +23,7 @@ func (n *Node) PrintList() {
 	start := n
 	for start.Next != nil {
 		fmt.Printf("%v <- ", start.Current.Name)
+		// fmt.Printf("%v\n", start.Current.Name)
 		start = start.Next
 	}
 	fmt.Printf("%v\n", start.Current.Name)

@@ -12,11 +12,8 @@
     - The pathfinder file defines the interface for pathFinders. It also manages which algorithm to chose, based on the graph provided.
 5. Seems my builder cannot register all connections. Should check it.
 
-6. Should I redo the builder?
-    it seems it avoids clean architecture pattern. The thing is, I recive a string of data and then split
-    if into fields. I guess I should have done it in interface adapters level.
-    The data checking and string splitting should have been done before creating rooms and tunnels.
-    This data is then just given into builder as "name", "x", "y".
+6. When adding web interface, consider creating two methods of creating anthill: from text. And drawing.
+    The easiest way would be making the frontend able to construct an input text simmilar CLI input text.
 
 7. Bug Found for simple pathfinder: If the start is adjacent to the end, the path cannot be found.
 
