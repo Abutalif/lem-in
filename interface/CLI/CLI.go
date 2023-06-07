@@ -92,7 +92,7 @@ func (c *CLI) saveData(filename string) error {
 			c.readState = rooms
 		case rooms:
 			if strings.Contains(c.inout, line) {
-				return errors.New("ERROR: repeated rooms")
+				return errors.New("ERROR: dudplicating input data")
 			}
 
 			if len(strings.Fields(line)) != 3 {

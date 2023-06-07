@@ -1,22 +1,30 @@
 1. Dual CMD. One for CLI. One for web. 
 
 2. Check all endcases:
-    - No end
-    - No start
-    - No connection
+    - No end [DONE]
+    - No start [DONE]
+    - No connection [DONE]
+    - Duplicating rooms [DONE]
 
 3. See Edmonds–Karp algorithm and Dinic's algorithm.
 
 4. Create a folder in usecases named pathfinders, which contain packages named after used algorythm.
     - Each file defines a struct that fits to the pathFinder interface.
     - The pathfinder file defines the interface for pathFinders. It also manages which algorithm to chose, based on the graph provided.
-5. Seems my builder cannot register all connections. Should check it.
+
+5. Seems my builder cannot register all connections. Should check it. [DONE]
 
 6. When adding web interface, consider creating two methods of creating anthill: from text. And drawing.
-    The easiest way would be making the frontend able to construct an input text simmilar CLI input text.
+    The easiest way would be making the frontend able to construct an input text simmilar to CLI input text.
+                                    ---or---
+    My builder will recieve only data needed to build a room, tunnel and anthill. The interface should just fit incoming data to it.
+    No matter what are the incoming things.
 
-7. Bug Found for simple pathfinder: If the start is adjacent to the end, the path cannot be found.
+7. Gotta add all tests from intra and audit.
+
+8. Standartize error message. Every message should start with "ERROR: invalid data format,"
+
 
 Future improvement:
 Make each node of the path have not a single continuation, but several.
-And then, traversing ants can choose, which path to go based on if there is no ant.
+And then, traversing ants can choose, which path to go based on if there is (or will be) no ant.

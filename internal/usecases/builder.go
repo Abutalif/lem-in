@@ -33,6 +33,9 @@ func (b *Builder) CreateRoom(line string, kind entities.RoomKind) error {
 	if err != nil {
 		return err
 	}
+	if _, has := b.anthill.Rooms[name]; has {
+		return errors.New("ERROR: repeated rooms")
+	}
 	newRoom := &entities.Room{
 		Name:        name,
 		Visited:     false,
