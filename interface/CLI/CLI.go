@@ -45,10 +45,10 @@ func (c *CLI) Run(filename string) error {
 	if err = c.saveData(filename); err != nil {
 		return err
 	}
-	c.builder.Anthill().Show()
 	if err = c.solve(); err != nil {
 		return err
 	}
+	c.builder.Anthill().Show()
 	if err = c.writeResult(); err != nil {
 		return err
 	}
@@ -108,12 +108,12 @@ func (c *CLI) saveData(filename string) error {
 			if c.roomKind != entities.Regular {
 				c.roomKind = entities.Regular
 			}
-			fmt.Printf("writing room: %v\n", line)
+			// fmt.Printf("writing room: %v\n", line)
 		case tunnels:
 			if err = c.builder.CreateTunnel(line); err != nil {
 				return err
 			}
-			fmt.Printf("writing tunnel: %v\n", line)
+			// fmt.Printf("writing tunnel: %v\n", line)
 		case comment:
 			c.readState = prevState
 		default:

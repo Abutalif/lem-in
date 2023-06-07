@@ -56,7 +56,7 @@ func (a *Anthill) Show() {
 		case End:
 			kind = "end"
 		}
-		fmt.Printf("%v - %v - x:%v - y:%v , connected to:\n", val.Name, kind, val.X, val.Y)
+		fmt.Printf("%v - %v - visited: %v, connected to:\n", val.Name, kind, val.Visited)
 		for _, cons := range val.Connections {
 			fmt.Printf("%v, ", cons.Name)
 		}

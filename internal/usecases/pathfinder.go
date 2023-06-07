@@ -18,6 +18,7 @@ func NewPathfinder() Pathfinder {
 	return &simple{}
 }
 
+// FIXME: Bug found. Adjacent start and end causes no path found.
 func (s *simple) Find(colony *entities.Anthill) []*entities.Node {
 	start := colony.GetStart()
 	start.Visited = true
@@ -43,7 +44,8 @@ func (s *simple) Find(colony *entities.Anthill) []*entities.Node {
 }
 
 func (s *simple) checkNeighbors(current *entities.Room) *entities.Node {
-	current.Visited = true
+	current.Visited = true // this can be played with
+	// fmt.Println("Visiting", current.Name)
 	for _, neighbor := range current.Connections {
 		if !neighbor.Visited {
 			if neighbor.Kind == entities.End {

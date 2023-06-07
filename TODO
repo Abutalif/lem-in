@@ -4,18 +4,21 @@
     - No end
     - No start
     - No connection
+
 3. See Edmonds–Karp algorithm and Dinic's algorithm.
+
 4. Create a folder in usecases named pathfinders, which contain packages named after used algorythm.
     - Each file defines a struct that fits to the pathFinder interface.
     - The pathfinder file defines the interface for pathFinders. It also manages which algorithm to chose, based on the graph provided.
 5. Seems my builder cannot register all connections. Should check it.
-
 
 6. Should I redo the builder?
     it seems it avoids clean architecture pattern. The thing is, I recive a string of data and then split
     if into fields. I guess I should have done it in interface adapters level.
     The data checking and string splitting should have been done before creating rooms and tunnels.
     This data is then just given into builder as "name", "x", "y".
+
+7. Bug Found for simple pathfinder: If the start is adjacent to the end, the path cannot be found.
 
 Future improvement:
 Make each node of the path have not a single continuation, but several.
