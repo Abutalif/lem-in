@@ -51,13 +51,15 @@
     
     So, technically, it is just two tunnels connected by several tunnels. The task allows that. But ut might cause some problems to me. That is, if all tunnels are valid, it means only one will be used. It should not halt execturion,
     as each room has a mark called visited. But it will increase computation time, as it takes time to see all conections.
-    So, I better ignore all repeating tunnels. Just keep one.
+    So, I better ignore all repeating tunnels. Just keep one. [DONE]
 
 14. Might actaully try this (Dijkstra goroutine):
     https://stackoverflow.com/questions/70156258/golang-dijkstra-goroutines
 
 15. For another pathfinder implementation (Dijkstra):
     https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
+
+16. Presenter will proveide list of movements
 
 Future improvement:
 Make each node of the path have not a single continuation, but several.

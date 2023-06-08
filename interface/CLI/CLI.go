@@ -94,7 +94,6 @@ func (c *CLI) saveData(filename string) error {
 			c.builder.SetAnts(uint(num))
 			c.readState = rooms
 		case rooms:
-			// should check whether to delete this part
 			name, x, y, err := c.checkRoomData(line)
 			if err != nil {
 				if err = c.makeTunnel(line); err != nil {

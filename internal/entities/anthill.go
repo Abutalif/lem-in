@@ -13,7 +13,7 @@ type Room struct {
 	Y           int
 	Visited     bool
 	Kind        RoomKind
-	Connections []*Room // should I use map instead of slice for ease exsiting tunnel check?
+	Connections []*Room
 }
 
 type RoomKind uint8
@@ -62,4 +62,14 @@ func (a *Anthill) Show() {
 		}
 		fmt.Printf("\n\n")
 	}
+}
+
+func (r *Room) IsNeighbor(room *Room) bool {
+	for _, neighbor := range r.Connections {
+		if neighbor == room {
+			return true
+		}
+	}
+
+	return false
 }

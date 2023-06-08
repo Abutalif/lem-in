@@ -48,7 +48,17 @@ func (b *Builder) CreateTunnel(roomNames []string) error {
 	if !has1 || !has2 {
 		return errors.New("ERROR: invalid tunnel info - tunnel to nonexisting room")
 	}
-	// TODO: check if connection is already there
+
+	var existing bool
+	if len(room1.Connections) > len(room2.Connections) {
+		existing = room2.IsNeighbor(room1)
+	} else {
+		existing = room1.IsNeighbor(room2)
+	}
+
+	if existing {
+		return nil
+	}
 
 	room1.Connections = append(room1.Connections, room2)
 	room2.Connections = append(room2.Connections, room1)

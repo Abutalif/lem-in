@@ -28,7 +28,7 @@ func (s *simple) Find(colony *entities.Anthill) []*entities.Node {
 					Current: start,
 					Next:    nil,
 				}
-
+				// path = path.Reverse()
 				paths = append(paths, path)
 			}
 		}
