@@ -32,7 +32,7 @@ type CLI struct {
 func NewCLI() *CLI {
 	return &CLI{
 		builder:    usecases.NewBuilder(),
-		pathfinder: usecases.NewPathfinder(),
+		pathfinder: usecases.NewPathfinder("simple"), // will be changeable
 		roomKind:   entities.Regular,
 		readState:  ants,
 		startFound: false,
@@ -68,7 +68,10 @@ func (c *CLI) saveData(filename string) error {
 	for fileScan.Scan() {
 		line := fileScan.Text()
 		if len(line) == 0 {
-			return errors.New("ERROR: empty entry line")
+			return errors.New("ERROR: empty line")
+		}
+		if strings.Contains(c.inout, line) {
+			return errors.New("ERROR: duplicating input data")
 		}
 		if strings.HasPrefix(line, "#") {
 			if line == "##start" {
@@ -91,25 +94,25 @@ func (c *CLI) saveData(filename string) error {
 			c.builder.SetAnts(uint(num))
 			c.readState = rooms
 		case rooms:
-			if strings.Contains(c.inout, line) {
-				return errors.New("ERROR: dudplicating input data")
-			}
-
-			if len(strings.Fields(line)) != 3 {
+			// should check whether to delete this part
+			name, x, y, err := c.checkRoomData(line)
+			if err != nil {
+				if err = c.makeTunnel(line); err != nil {
+					return errors.New("ERROR: not a valid room or tunnel info")
+				}
 				c.readState = tunnels
-				c.builder.CreateTunnel(line)
-				continue
 			}
 
-			if err = c.builder.CreateRoom(line, c.roomKind); err != nil {
+			if err = c.builder.CreateRoom(name, x, y, c.roomKind); err != nil {
 				return err
 			}
 
 			if c.roomKind != entities.Regular {
 				c.roomKind = entities.Regular
 			}
+
 		case tunnels:
-			if err = c.builder.CreateTunnel(line); err != nil {
+			if err = c.makeTunnel(line); err != nil {
 				return err
 			}
 		case comment:
@@ -128,6 +131,7 @@ func (c *CLI) saveData(filename string) error {
 	return nil
 }
 
+// TODO this should do something useful, not just return list of paths
 func (c *CLI) solve() error {
 	paths := c.pathfinder.Find(c.builder.Anthill())
 	if len(paths) < 1 {
@@ -141,7 +145,35 @@ func (c *CLI) solve() error {
 
 // TODO
 func (c *CLI) writeResult() error {
-	// first fmt.Println(c.inout)
-	// the data will be recieved in the format that
+	return nil
+}
+
+func (c *CLI) checkRoomData(line string) (string, int, int, error) {
+	roomData := strings.Fields(line)
+	if len(roomData) != 3 {
+		return "", 0, 0, errors.New("ERROR: invalid room format - wrong number of entries")
+	}
+
+	x, err := strconv.Atoi(roomData[1])
+	if err != nil {
+		return "", 0, 0, errors.New("ERROR: invalid room format - incorrect x coord")
+	}
+
+	y, err := strconv.Atoi(roomData[2])
+	if err != nil {
+		return "", 0, 0, errors.New("ERROR: invalid room format - incorrect y coord")
+	}
+
+	return roomData[0], x, y, nil
+}
+
+func (c *CLI) makeTunnel(line string) error {
+	roomNames := strings.Split(line, "-")
+	if len(roomNames) != 2 {
+		return errors.New("ERROR: incorrect tunnel info - not 2 rooms")
+	}
+	if err := c.builder.CreateTunnel(roomNames); err != nil {
+		return err
+	}
 	return nil
 }

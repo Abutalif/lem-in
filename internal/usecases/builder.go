@@ -2,8 +2,6 @@ package usecases
 
 import (
 	"errors"
-	"strconv"
-	"strings"
 
 	"lem-in/internal/entities"
 )
@@ -28,11 +26,7 @@ func (b *Builder) SetAnts(num uint) {
 	b.anthill.AntNum = num
 }
 
-func (b *Builder) CreateRoom(line string, kind entities.RoomKind) error {
-	name, x, y, err := b.checkData(line)
-	if err != nil {
-		return err
-	}
+func (b *Builder) CreateRoom(name string, x, y int, kind entities.RoomKind) error {
 	if _, has := b.anthill.Rooms[name]; has {
 		return errors.New("ERROR: repeated rooms")
 	}
@@ -48,35 +42,13 @@ func (b *Builder) CreateRoom(line string, kind entities.RoomKind) error {
 	return nil
 }
 
-func (b *Builder) checkData(line string) (string, int, int, error) {
-	roomData := strings.Fields(line)
-	if len(roomData) != 3 {
-		return "", 0, 0, errors.New("ERROR: invalid room format - wrong number of entires")
-	}
-
-	x, err := strconv.Atoi(roomData[1])
-	if err != nil {
-		return "", 0, 0, errors.New("ERROR: invalid room format - incorrect x coord")
-	}
-
-	y, err := strconv.Atoi(roomData[2])
-	if err != nil {
-		return "", 0, 0, errors.New("ERROR: invalid room format - incorrect y coord")
-	}
-
-	return roomData[0], x, y, nil
-}
-
-func (b *Builder) CreateTunnel(line string) error {
-	rooms := strings.Split(line, "-")
-	if len(rooms) != 2 {
-		return errors.New("ERROR: incorrect tunnel info - not 2 rooms")
-	}
-	room1, has1 := b.anthill.Rooms[rooms[0]]
-	room2, has2 := b.anthill.Rooms[rooms[1]]
+func (b *Builder) CreateTunnel(roomNames []string) error {
+	room1, has1 := b.anthill.Rooms[roomNames[0]]
+	room2, has2 := b.anthill.Rooms[roomNames[1]]
 	if !has1 || !has2 {
 		return errors.New("ERROR: invalid tunnel info - tunnel to nonexisting room")
 	}
+	// TODO: check if connection is already there
 
 	room1.Connections = append(room1.Connections, room2)
 	room2.Connections = append(room2.Connections, room1)

@@ -13,7 +13,7 @@ type Room struct {
 	Y           int
 	Visited     bool
 	Kind        RoomKind
-	Connections []*Room
+	Connections []*Room // should I use map instead of slice for ease exsiting tunnel check?
 }
 
 type RoomKind uint8

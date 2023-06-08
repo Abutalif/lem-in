@@ -6,9 +6,9 @@
     - No connection [DONE]
     - Duplicating rooms [DONE]
 
-3. See Edmonds–Karp algorithm and Dinic's algorithm.
+3. See Edmonds–Karp algorithm and Dinic's algorithm. [DONE]
 
-4. Create a folder in usecases named pathfinders, which contain packages named after used algorythm.
+4. Create a folder in usecases named pathfinders, which contain packages named after used algorithm. [DONE]
     - Each file defines a struct that fits to the pathFinder interface.
     - The pathfinder file defines the interface for pathFinders. It also manages which algorithm to chose, based on the graph provided.
 
@@ -19,11 +19,45 @@
                                     ---or---
     My builder will recieve only data needed to build a room, tunnel and anthill. The interface should just fit incoming data to it.
     No matter what are the incoming things.
+    I chose the second option. It will be easier to fit web with its json. [DONE]
 
 7. Gotta add all tests from intra and audit.
 
-8. Standartize error message. Every message should start with "ERROR: invalid data format,"
+8. Standartize error message. Every message should start with "ERROR: invalid data format,. Use errors.Join().
 
+9. Right now my code does depth first search. This is bad because i might end up chosing longer paths,
+    because they come first in a slice.
+    A better way would be to implement a breadth first search. This will require either using hashmaps or queues.
+    But I am thinking of an alternative. Use goroutines for start node's connections.
+    This might be fruitful, as the maximum number of paths is equal to the number of connections of the start node (due to edge and node capacity being equal to 1).
+    But then, problem arises when pathfinder chooses less optimal path within internal nodes. Should I use goroutines for internals as well??
+    Might be cumbersome, as there is a limited number of goroutines per program. I would also need to use mutex to avoid data race,
+    which again adds to complexity and computation time. Seems to be better to avoid goruotines at all.
+    Implementing goroutines is also troublesome, because functions called with them cannot have return values.
+
+10. Add a cleaner algorithm. That is, mark rooms that are not part of a valid path unvisited again.
+
+11. Should add some kind of queue maker algorithm. Builder yeilds an anthill. Pathfinder gives paths. But the solution
+    consists not only of shortest paths. It actually tells how ants ants should be moving through the maze. That means -
+    we need a queue maker. I don't know how presenter plays a role in it, but {solver = pathfinder + queuemaker}.
+
+12. The idea seems that I must do the shortest path algorithm. Exclude nodes found in that path. Find next shortest path.
+    Exclude these nodes as well. Repeat until there are no paths from start to end.
+
+13. It seems that there is an issue with several paths, i.e. repeated paths. For now I solve it with it by prohibitting
+    duplicated lines. But if tunnel info is repeated by interchanging room names, this will create repeated tunnel (all my tunnels are biderictional). Somehow it seems very ok. In the instructions it is stated:
+
+        ---A room can be linked to an infinite number of rooms and by as many tunnels as deemed necessary.---
+    
+    So, technically, it is just two tunnels connected by several tunnels. The task allows that. But ut might cause some problems to me. That is, if all tunnels are valid, it means only one will be used. It should not halt execturion,
+    as each room has a mark called visited. But it will increase computation time, as it takes time to see all conections.
+    So, I better ignore all repeating tunnels. Just keep one.
+
+14. Might actaully try this (Dijkstra goroutine):
+    https://stackoverflow.com/questions/70156258/golang-dijkstra-goroutines
+
+15. For another pathfinder implementation (Dijkstra):
+    https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
 
 Future improvement:
 Make each node of the path have not a single continuation, but several.
