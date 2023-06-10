@@ -22,7 +22,7 @@ func (b *Builder) Anthill() *entities.Anthill {
 	return b.anthill
 }
 
-func (b *Builder) SetAnts(num uint) {
+func (b *Builder) SetAnts(num int) {
 	b.anthill.AntNum = num
 }
 

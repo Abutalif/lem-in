@@ -4,7 +4,7 @@ import "fmt"
 
 type Anthill struct {
 	Rooms  map[string]*Room
-	AntNum uint
+	AntNum int
 }
 
 type Room struct {

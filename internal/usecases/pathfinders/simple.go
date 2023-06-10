@@ -1,9 +1,11 @@
 package pathfinder
 
-import "lem-in/internal/entities"
+import (
+	"lem-in/internal/entities"
+)
 
 type Pathfinder interface {
-	Find(*entities.Anthill) []*entities.Node
+	Find(*entities.Anthill) []entities.Path
 }
 
 type simple struct {
@@ -14,21 +16,21 @@ func NewSimple() Pathfinder {
 	return &simple{}
 }
 
-func (s *simple) Find(colony *entities.Anthill) []*entities.Node {
+func (s *simple) Find(colony *entities.Anthill) []entities.Path {
 	start := colony.GetStart()
 	s.end = colony.GetEnd()
 	start.Visited = true
-	paths := make([]*entities.Node, 0)
+	paths := make([]entities.Path, 0)
 	for _, afterStart := range start.Connections {
 		if !afterStart.Visited {
-			path := s.checkNeighbors(afterStart)
-			if path != nil {
-				last := path.GetLast()
-				last.Next = &entities.Node{
-					Current: start,
-					Next:    nil,
+			route := s.checkNeighbors(afterStart)
+			if route != nil {
+				len := route.Len()
+				path := entities.Path{
+					Start: route.Reverse(),
+					Len:   len,
+					Ants:  0,
 				}
-				// path = path.Reverse()
 				paths = append(paths, path)
 			}
 		}

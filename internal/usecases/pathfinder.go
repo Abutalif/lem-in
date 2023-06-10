@@ -6,7 +6,7 @@ import (
 )
 
 type Pathfinder interface {
-	Find(*entities.Anthill) []*entities.Node
+	Find(*entities.Anthill) []entities.Path
 }
 
 func NewPathfinder(name string) Pathfinder {
@@ -16,7 +16,8 @@ func NewPathfinder(name string) Pathfinder {
 	}
 }
 
-// func GetPathfinders() []string {
-// 	// return list of names of pathfinders
-// 	return nil
-// }
+// TODO
+func GetPathfinders() []Pathfinder { // or can return []string
+	// return list of avialable of pathfinders
+	return nil
+}

@@ -22,6 +22,7 @@ const (
 type CLI struct {
 	builder    usecases.Builder
 	pathfinder usecases.Pathfinder
+	organizer  usecases.Organizer
 	roomKind   entities.RoomKind
 	readState  byte
 	startFound bool
@@ -33,6 +34,7 @@ func NewCLI() *CLI {
 	return &CLI{
 		builder:    usecases.NewBuilder(),
 		pathfinder: usecases.NewPathfinder("simple"), // will be changeable
+		organizer:  usecases.NewOrganizer(),
 		roomKind:   entities.Regular,
 		readState:  ants,
 		startFound: false,
@@ -45,14 +47,13 @@ func (c *CLI) Run(filename string) error {
 	if err = c.saveData(filename); err != nil {
 		return err
 	}
-	if err = c.solve(); err != nil {
-		return err
-	}
-	// c.builder.Anthill().Show()
-	if err = c.writeResult(); err != nil {
+
+	solution, err := c.solve(c.builder.Anthill())
+	if err != nil {
 		return err
 	}
 
+	c.writeResult(solution)
 	return nil
 }
 
@@ -91,7 +92,7 @@ func (c *CLI) saveData(filename string) error {
 			if err != nil || num < 1 {
 				return errors.New("ERROR: not valid ants number")
 			}
-			c.builder.SetAnts(uint(num))
+			c.builder.SetAnts(num)
 			c.readState = rooms
 		case rooms:
 			name, x, y, err := c.checkRoomData(line)
@@ -100,6 +101,7 @@ func (c *CLI) saveData(filename string) error {
 					return errors.New("ERROR: not a valid room or tunnel info")
 				}
 				c.readState = tunnels
+				continue
 			}
 
 			if err = c.builder.CreateRoom(name, x, y, c.roomKind); err != nil {
@@ -130,21 +132,28 @@ func (c *CLI) saveData(filename string) error {
 	return nil
 }
 
-// TODO this should do something useful, not just return list of paths
-func (c *CLI) solve() error {
-	paths := c.pathfinder.Find(c.builder.Anthill())
+func (c *CLI) solve(colony *entities.Anthill) (entities.Queue, error) {
+	paths := c.pathfinder.Find(colony)
 	if len(paths) < 1 {
-		return errors.New("ERROR: no path found")
+		return nil, errors.New("ERROR: no path found")
 	}
-	for _, p := range paths {
-		p.PrintList()
+	for _, path := range paths {
+		path.Start.PrintList()
 	}
-	return nil
+	queue := c.organizer.Schedule(paths, c.builder.Anthill().AntNum, c.builder.Anthill().GetStart())
+	return queue, nil
 }
 
-// TODO
-func (c *CLI) writeResult() error {
-	return nil
+func (c *CLI) writeResult(queue entities.Queue) {
+	for _, step := range queue {
+		for i, move := range step {
+			fmt.Printf("L%v-%v", move.Ant, move.Destination)
+			if i < len(step)-1 {
+				fmt.Print(" ")
+			}
+		}
+		fmt.Println()
+	}
 }
 
 func (c *CLI) checkRoomData(line string) (string, int, int, error) {
