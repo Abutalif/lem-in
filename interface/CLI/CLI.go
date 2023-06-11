@@ -33,7 +33,7 @@ type CLI struct {
 func NewCLI() *CLI {
 	return &CLI{
 		builder:    usecases.NewBuilder(),
-		pathfinder: usecases.NewPathfinder("simple"), // will be changeable
+		pathfinder: usecases.NewPathfinder("dijkstra"), // will be changeable
 		organizer:  usecases.NewOrganizer(),
 		roomKind:   entities.Regular,
 		readState:  ants,
@@ -47,12 +47,12 @@ func (c *CLI) Run(filename string) error {
 	if err = c.saveData(filename); err != nil {
 		return err
 	}
-
+	// c.pathfinder.Find(c.builder.Anthill())
+	// c.builder.Anthill().Show()
 	solution, err := c.solve(c.builder.Anthill())
 	if err != nil {
 		return err
 	}
-
 	c.writeResult(solution)
 	return nil
 }
@@ -137,14 +137,13 @@ func (c *CLI) solve(colony *entities.Anthill) (entities.Queue, error) {
 	if len(paths) < 1 {
 		return nil, errors.New("ERROR: no path found")
 	}
-	for _, path := range paths {
-		path.Start.PrintList()
-	}
+
 	queue := c.organizer.Schedule(paths, c.builder.Anthill().AntNum, c.builder.Anthill().GetStart())
 	return queue, nil
 }
 
 func (c *CLI) writeResult(queue entities.Queue) {
+	fmt.Println(c.inout)
 	for _, step := range queue {
 		for i, move := range step {
 			fmt.Printf("L%v-%v", move.Ant, move.Destination)

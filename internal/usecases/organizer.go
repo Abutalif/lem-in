@@ -35,19 +35,17 @@ func (o *output) Schedule(paths []entities.Path, totalAnts int, start *entities.
 			order[i] = paths[0].Start
 		} else {
 			for j := 0; j < len(paths)-1; j++ {
-				if paths[j].Len+paths[j].Ants > paths[j+1].Len+paths[j+1].Ants {
+				if paths[j].Len+paths[j].Ants >= paths[j+1].Len+paths[j+1].Ants {
 					order[i] = paths[j+1].Start
 					paths[j+1].Ants++
 				} else {
 					order[i] = paths[j].Start
 					paths[j].Ants++
 				}
-				// order[i].PrintList()
 			}
 		}
 	}
 
-	// FIXME: does not what was intendet
 	var nilCounter int
 
 	for {

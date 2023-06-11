@@ -36,6 +36,7 @@ func (b *Builder) CreateRoom(name string, x, y int, kind entities.RoomKind) erro
 		X:           x,
 		Y:           y,
 		Kind:        kind,
+		StartDist:   entities.Infinity,
 		Connections: make([]*entities.Room, 0),
 	}
 	b.anthill.Rooms[name] = newRoom

@@ -1,10 +1,10 @@
-1. Dual CMD. One for CLI. One for web. 
+1. [DONE] Dual CMD. One for CLI. One for web. 
 
 2. [DONE] Check all endcases:
-    - No end [DONE]
-    - No start [DONE]
-    - No connection [DONE]
-    - Duplicating rooms [DONE]
+    - No end
+    - No start
+    - No connection
+    - Duplicating rooms
 
 3. [DONE] See Edmonds–Karp algorithm and Dinic's algorithm. 
 
@@ -25,7 +25,7 @@
 
 8. Standartize error message. Every message should start with "ERROR: invalid data format,. Use errors.Join().
 
-9. Right now my code does depth first search. This is bad because i might end up chosing longer paths,
+9. [DONE] Right now my code does depth first search. This is bad because i might end up chosing longer paths,
     because they come first in a slice.
     A better way would be to implement a breadth first search. This will require either using hashmaps or queues.
     But I am thinking of an alternative. Use goroutines for start node's connections.
@@ -34,8 +34,6 @@
     Might be cumbersome, as there is a limited number of goroutines per program. I would also need to use mutex to avoid data race,
     which again adds to complexity and computation time. Seems to be better to avoid goruotines at all.
     Implementing goroutines is also troublesome, because functions called with them cannot have return values.
-
-10. Add a cleaner algorithm. That is, mark rooms that are not part of a valid path unvisited again.
 
 11. [DONE] Should add some kind of queue maker algorithm. Builder yeilds an anthill. Pathfinder gives paths. But the solution
     consists not only of shortest paths. It actually tells how ants ants should be moving through the maze. That means -
@@ -56,12 +54,13 @@
 14. Might actaully try this (Dijkstra goroutine):
     https://stackoverflow.com/questions/70156258/golang-dijkstra-goroutines
 
-15. For another pathfinder implementation (Dijkstra):
+15. [DONE] For another pathfinder implementation (Dijkstra):
     https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
 
 16. [DONE] Presenter will provide list of movements.
 
 17. Consider chaning your slices of pointers to either no pointer slices or Maps to pointers. Do it after benchmark testing.
+
 
 Future improvement:
 Make each node of the path have not a single continuation, but several.

@@ -13,6 +13,7 @@ type Room struct {
 	Y           int
 	Visited     bool
 	Kind        RoomKind
+	StartDist   uint
 	Connections []*Room
 }
 
@@ -24,6 +25,8 @@ const (
 	Start
 	End
 )
+
+const Infinity = ^uint(0)
 
 func (a *Anthill) GetStart() *Room {
 	for _, room := range a.Rooms {
@@ -56,7 +59,7 @@ func (a *Anthill) Show() {
 		case End:
 			kind = "end"
 		}
-		fmt.Printf("%v - %v - visited: %v, connected to:\n", val.Name, kind, val.Visited)
+		fmt.Printf("%v - %v - startDist: %v, connected to:\n", val.Name, kind, val.StartDist)
 		for _, cons := range val.Connections {
 			fmt.Printf("%v, ", cons.Name)
 		}
@@ -72,4 +75,19 @@ func (r *Room) IsNeighbor(room *Room) bool {
 	}
 
 	return false
+}
+
+func (r *Room) SortConnByDist() {
+	length := len(r.Connections)
+	if length <= 1 {
+		return
+	}
+
+	for i := 0; i < length-1; i++ {
+		for j := 0; j < length-i-1; j++ {
+			if r.Connections[j].StartDist > r.Connections[j+1].StartDist {
+				r.Connections[j], r.Connections[j+1] = r.Connections[j+1], r.Connections[j]
+			}
+		}
+	}
 }

@@ -1,12 +1,6 @@
-package pathfinder
+package pathfinders
 
-import (
-	"lem-in/internal/entities"
-)
-
-type Pathfinder interface {
-	Find(*entities.Anthill) []entities.Path
-}
+import "lem-in/internal/entities"
 
 type simple struct {
 	end *entities.Room

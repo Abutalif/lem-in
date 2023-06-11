@@ -29,6 +29,13 @@ func (n *Node) PrintList() {
 	fmt.Printf("%v\n", start.Current.Name)
 }
 
+func (n *Node) ChangeFirst(toAdd *Room) *Node {
+	return &Node{
+		Current: toAdd,
+		Next:    n,
+	}
+}
+
 func (n *Node) Reverse() *Node {
 	if n == nil || n.Next == nil {
 		return n
