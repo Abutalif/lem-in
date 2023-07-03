@@ -1,31 +1,38 @@
-1. [DONE] Dual CMD. One for CLI. One for web. 
+[TODO]
+1. Too long solution paths:
+    example01, example02, example05,
+2. Standartize error message. Every message should start with "ERROR: invalid data format,. Use errors.Join().
+3. Might actaully try this (Dijkstra goroutine):
+    https://stackoverflow.com/questions/70156258/golang-dijkstra-goroutines
+4. Consider chaning your slices of pointers to either no pointer slices or Maps to pointers. Do it after benchmark testing.
+ 
 
-2. [DONE] Check all endcases:
+
+[DONE]
+1. Dual CMD. One for CLI. One for web. 
+
+2. Check all endcases:
     - No end
     - No start
     - No connection
     - Duplicating rooms
 
-3. [DONE] See Edmonds–Karp algorithm and Dinic's algorithm. 
+3.  See Edmonds–Karp algorithm and Dinic's algorithm. 
 
-4. [DONE] Create a folder in usecases named pathfinders, which contain packages named after used algorithm.
+4.  Create a folder in usecases named pathfinders, which contain packages named after used algorithm.
     - Each file defines a struct that fits to the pathFinder interface.
     - The pathfinder file defines the interface for pathFinders. It also manages which algorithm to chose, based on the graph provided.
 
-5. [DONE] Seems my builder cannot register all connections. Should check it. 
+5.  Seems my builder cannot register all connections. Should check it. 
 
-6. [DONE] When adding web interface, consider creating two methods of creating anthill: from text. And drawing.
+6.  When adding web interface, consider creating two methods of creating anthill: from text. And drawing.
     The easiest way would be making the frontend able to construct an input text simmilar to CLI input text.
                                     ---or---
     My builder will recieve only data needed to build a room, tunnel and anthill. The interface should just fit incoming data to it.
     No matter what are the incoming things.
     I chose the second option. It will be easier to fit web with its json.
 
-7. Gotta add all tests from intra and audit.
-
-8. Standartize error message. Every message should start with "ERROR: invalid data format,. Use errors.Join().
-
-9. [DONE] Right now my code does depth first search. This is bad because i might end up chosing longer paths,
+7.  Right now my code does depth first search. This is bad because i might end up chosing longer paths,
     because they come first in a slice.
     A better way would be to implement a breadth first search. This will require either using hashmaps or queues.
     But I am thinking of an alternative. Use goroutines for start node's connections.
@@ -35,14 +42,14 @@
     which again adds to complexity and computation time. Seems to be better to avoid goruotines at all.
     Implementing goroutines is also troublesome, because functions called with them cannot have return values.
 
-11. [DONE] Should add some kind of queue maker algorithm. Builder yeilds an anthill. Pathfinder gives paths. But the solution
+8.  Should add some kind of queue maker algorithm. Builder yeilds an anthill. Pathfinder gives paths. But the solution
     consists not only of shortest paths. It actually tells how ants ants should be moving through the maze. That means -
     we need a queue maker. I don't know how presenter plays a role in it, but {solver = pathfinder + queuemaker}. 
 
-12. The idea seems that I must do the shortest path algorithm. Exclude nodes found in that path. Find next shortest path.
+9.  The idea seems that I must do the shortest path algorithm. Exclude nodes found in that path. Find next shortest path.
     Exclude these nodes as well. Repeat until there are no paths from start to end.
 
-13. [DONE] It seems that there is an issue with several paths, i.e. repeated paths. For now I solve it with it by prohibitting
+10.  It seems that there is an issue with several paths, i.e. repeated paths. For now I solve it with it by prohibitting
     duplicated lines. But if tunnel info is repeated by interchanging room names, this will create repeated tunnel (all my tunnels are biderictional). Somehow it seems very ok. In the instructions it is stated:
 
         ---A room can be linked to an infinite number of rooms and by as many tunnels as deemed necessary.---
@@ -51,17 +58,9 @@
     as each room has a mark called visited. But it will increase computation time, as it takes time to see all conections.
     So, I better ignore all repeating tunnels. Just keep one.
 
-14. Might actaully try this (Dijkstra goroutine):
-    https://stackoverflow.com/questions/70156258/golang-dijkstra-goroutines
-
-15. [DONE] For another pathfinder implementation (Dijkstra):
+11.  For another pathfinder implementation (Dijkstra):
     https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
 
-16. [DONE] Presenter will provide list of movements.
+12.  Presenter will provide list of movements.
 
-17. Consider chaning your slices of pointers to either no pointer slices or Maps to pointers. Do it after benchmark testing.
-
-
-Future improvement:
-Make each node of the path have not a single continuation, but several.
-And then, traversing ants can choose, which path to go based on if there is (or will be) no ant.
+13. Gotta add all tests from intra and audit.
