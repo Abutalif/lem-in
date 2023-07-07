@@ -18,14 +18,13 @@ func (d *dijkstra) Find(colony *entities.Anthill) []entities.Path {
 
 	end := colony.GetEnd()
 	end.SortConnByDist()
-
 	for _, neighbor := range end.Connections {
 		route := getRoute(neighbor)
 		if route == nil {
 			continue
 		}
-		route = route.ChangeFirst(end)
 		len := route.Len()
+		route = route.ChangeFirst(end)
 		path := entities.Path{
 			Start: route.Reverse(),
 			Len:   len,
@@ -33,6 +32,7 @@ func (d *dijkstra) Find(colony *entities.Anthill) []entities.Path {
 		}
 
 		paths = append(paths, path)
+
 	}
 
 	return paths
@@ -48,16 +48,16 @@ func (d *dijkstra) setDistances(room *entities.Room) {
 }
 
 func getRoute(current *entities.Room) *entities.Node {
-	current.Visited = true
-	if current.StartDist == 1 {
+	if current.StartDist == 0 {
 		return &entities.Node{
 			Current: current,
 			Next:    nil,
 		}
 	}
 	current.SortConnByDist()
+	current.Visited = true
 	for _, neighbor := range current.Connections {
-		if neighbor.Visited {
+		if neighbor.Visited || neighbor.StartDist > current.StartDist {
 			continue
 		}
 		route := getRoute(neighbor)

@@ -1,6 +1,8 @@
 package entities
 
-import "fmt"
+import (
+	"strconv"
+)
 
 type Anthill struct {
 	Rooms  map[string]*Room
@@ -46,9 +48,10 @@ func (a *Anthill) GetEnd() *Room {
 	return nil
 }
 
-func (a *Anthill) Show() {
-	fmt.Println("AntNum:", a.AntNum)
-	fmt.Println("Rooms:")
+func (a *Anthill) Show() string {
+	res := ""
+	res += "AntNum: " + strconv.Itoa(a.AntNum) + "\n"
+	res += "Rooms:\n"
 	for _, val := range a.Rooms {
 		var kind string
 		switch val.Kind {
@@ -59,12 +62,18 @@ func (a *Anthill) Show() {
 		case End:
 			kind = "end"
 		}
-		fmt.Printf("%v - %v - startDist: %v, connected to:\n", val.Name, kind, val.StartDist)
-		for _, cons := range val.Connections {
-			fmt.Printf("%v, ", cons.Name)
+		res += val.Name + " - " + kind + " - startDist:" + strconv.Itoa(int(val.StartDist)) + "\n"
+		res += "Connections:\n"
+		for i, cons := range val.Connections {
+			res += cons.Name
+			if i < len(val.Connections)-1 {
+				res += ", "
+			}
+
 		}
-		fmt.Printf("\n\n")
+		res += "\n\n"
 	}
+	return res
 }
 
 func (r *Room) IsNeighbor(room *Room) bool {

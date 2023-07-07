@@ -14,43 +14,33 @@ func NewOrganizer() Organizer {
 	return &output{}
 }
 
-func (o *output) sortPaths(paths []entities.Path) {
-	n := len(paths)
-	for i := 0; i < n-1; i++ {
-		for j := 0; j < n-i-1; j++ {
-			if paths[j].Len > paths[j+1].Len {
-				paths[j], paths[j+1] = paths[j+1], paths[j]
+func (o *output) Schedule(paths []entities.Path, totalAnts int, start *entities.Room) entities.Queue {
+	// for i := range paths {
+	// 	fmt.Println(paths[i].Start.PrintList())
+	// }
+	order := make([]*entities.Node, totalAnts)
+	smallest := &paths[0]
+	for i := len(order) - 1; i >= 0; i-- {
+		for j := range paths {
+			if smallest.Ants+smallest.Len > paths[j].Len+paths[j].Ants && smallest != &paths[j] {
+				smallest = &paths[j]
 			}
 		}
+		// smallest = o.leastBusyPath(paths)
+		order[i] = smallest.Start.Next
+		smallest.Ants++
 	}
+	queue := o.runAnts(order, totalAnts)
+
+	return queue
 }
 
-func (o *output) Schedule(paths []entities.Path, totalAnts int, start *entities.Room) entities.Queue {
-	o.sortPaths(paths) // might be not needed
+func (o *output) runAnts(order []*entities.Node, totalAnts int) entities.Queue {
 	queue := make(entities.Queue, 0)
-
-	order := make([]*entities.Node, totalAnts)
-	for i := range order {
-		if len(paths) == 1 {
-			order[i] = paths[0].Start
-		} else {
-			for j := 0; j < len(paths)-1; j++ {
-				if paths[j].Len+paths[j].Ants >= paths[j+1].Len+paths[j+1].Ants {
-					order[i] = paths[j+1].Start
-					paths[j+1].Ants++
-				} else {
-					order[i] = paths[j].Start
-					paths[j].Ants++
-				}
-			}
-		}
-	}
-
-	var nilCounter int
 
 	for {
 		var usedPath []*entities.Node
-		nilCounter = 0
+		nilCounter := 0
 		step := make(entities.Step, 0)
 	Mid:
 		for i := 0; i < totalAnts; i++ {
@@ -81,6 +71,5 @@ func (o *output) Schedule(paths []entities.Path, totalAnts int, start *entities.
 			break
 		}
 	}
-
 	return queue
 }

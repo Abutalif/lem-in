@@ -20,8 +20,10 @@ func (s *simple) Find(colony *entities.Anthill) []entities.Path {
 			route := s.checkNeighbors(afterStart)
 			if route != nil {
 				len := route.Len()
+				route = route.Reverse()
+				route = route.ChangeFirst(start)
 				path := entities.Path{
-					Start: route.Reverse(),
+					Start: route,
 					Len:   len,
 					Ants:  0,
 				}

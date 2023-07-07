@@ -1,7 +1,5 @@
 package entities
 
-import "fmt"
-
 type Path struct {
 	Start *Node
 	Len   int
@@ -20,13 +18,15 @@ func (n *Node) GetLast() *Node {
 	return n.Next.GetLast()
 }
 
-func (n *Node) PrintList() {
+func (n *Node) PrintList() string {
+	res := ""
 	start := n
-	for start.Next != nil {
-		fmt.Printf("%v -> ", start.Current.Name)
+	for start != nil {
+		res += start.Current.Name + "->"
 		start = start.Next
 	}
-	fmt.Printf("%v\n", start.Current.Name)
+	res += "nil"
+	return res
 }
 
 func (n *Node) ChangeFirst(toAdd *Room) *Node {
@@ -47,7 +47,7 @@ func (n *Node) Reverse() *Node {
 }
 
 func (n *Node) Len() int {
-	count := 1
+	count := 0
 	current := n
 	for current != nil {
 		current = current.Next

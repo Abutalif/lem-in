@@ -1,11 +1,16 @@
 [TODO]
-1. Too long solution paths:
-    example01, example02, example05,
+1. find a way to switch between pathfinders, if there are two many steps.  (example1)
 2. Standartize error message. Every message should start with "ERROR: invalid data format,. Use errors.Join().
-3. Might actaully try this (Dijkstra goroutine):
+3. Consider chaning your slices of pointers to either no pointer slices or Maps to pointers. Do it after benchmark testing.
+4. In case if pathfinder finds num of path that is results in too many steps,
+    there must be a function that changes a pathfinder.
+    I have to mathematically find which path,
+    depending on paths' length and num of ants results in smallest num of steps.
+
+[Suggestions]
+1. Might actaully try this (Dijkstra goroutine):
     https://stackoverflow.com/questions/70156258/golang-dijkstra-goroutines
-4. Consider chaning your slices of pointers to either no pointer slices or Maps to pointers. Do it after benchmark testing.
- 
+2. Consider not following ants order. 
 
 
 [DONE]
@@ -64,3 +69,8 @@
 12.  Presenter will provide list of movements.
 
 13. Gotta add all tests from intra and audit.
+
+14. Example 5 is still too long. Cause: dijkstra working wrong. Fixed. Took away the visited flag.
+
+15. Make all internal functions return string instead of println:
+    entities.Anthill.Show(), path.PrinList()
