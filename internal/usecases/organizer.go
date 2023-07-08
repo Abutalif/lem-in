@@ -35,6 +35,7 @@ func (o *output) Schedule(paths []entities.Path, totalAnts int, start *entities.
 	return queue
 }
 
+// FIXME: unoptimised func
 func (o *output) runAnts(order []*entities.Node, totalAnts int) entities.Queue {
 	queue := make(entities.Queue, 0)
 

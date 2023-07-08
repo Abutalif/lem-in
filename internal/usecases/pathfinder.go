@@ -17,3 +17,5 @@ func NewPathfinder(name string) Pathfinder {
 		return pathfinders.NewSimple()
 	}
 }
+
+// TODO: pathfinder chooser

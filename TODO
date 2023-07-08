@@ -10,8 +10,48 @@
 [Suggestions]
 1. Might actaully try this (Dijkstra goroutine):
     https://stackoverflow.com/questions/70156258/golang-dijkstra-goroutines
-2. Consider not following ants order. 
+2. Consider not following ants order.
+3. Thank you for providing the function.
+    Based on the provided code, here are some suggestions for optimizing and improving performance:
 
+    Preallocate Slices: Instead of repeatedly allocating slices (usedPath, step, queue), you can preallocate them with the expected capacity. This can help avoid frequent reallocations and improve performance. You can estimate a reasonable initial capacity based on the size of the input data or use an upper bound if the size is unknown.
+
+    Use a Map for Faster Lookup: Instead of iterating over the usedPath slice to check if a node has already been visited, you can use a map for faster lookup. Maintain a map where the keys are the visited nodes, allowing you to quickly check if a node is already present. This can significantly reduce the time complexity from O(n) to O(1).
+
+    Minimize Slice Appends: The append operation inside the inner loop (usedPath = append(usedPath, order[i])) can be costly, especially as the size of the usedPath slice grows. If possible, consider using a different data structure or approach that avoids frequent appends.
+
+    Avoid Redundant Nil Checks: The final loop (for _, j := range order) iterates over the order slice to count the number of nil elements (nilCounter). Instead of checking for nil elements separately, you can keep track of the count while iterating through the ants in the inner loop. This eliminates the need for an additional loop and improves efficiency.
+
+    Consider Concurrency: Depending on the nature of your problem, you might consider utilizing concurrency to process ants concurrently. By distributing the work among goroutines, you can potentially improve performance by leveraging multiple CPU cores.
+
+    Remember to profile your code and conduct benchmarks to measure the impact of these optimizations. The actual performance gain may vary based on the specific characteristics of your data and system.
+4. Certainly! Here are some suggestions on how to conduct benchmarks in Go:
+
+    Use the testing package: Go provides a built-in testing package that includes support for writing benchmarks. By creating benchmark functions and running them with the testing framework, you can easily conduct and compare benchmarks.
+
+    Prefix benchmark functions with "Benchmark": To write a benchmark, create a function with a name starting with "Benchmark". For example, func BenchmarkMyFunction(b *testing.B) {}.
+
+    Use the b.N value for iterations: The b parameter in the benchmark function provides a N field that represents the number of iterations to run the benchmark. Use this value in your code to repeat the operation being benchmarked.
+
+    Use b.StartTimer() and b.StopTimer(): If your benchmark code includes setup or initialization that you don't want to measure, you can use b.StartTimer() and b.StopTimer() to exclude that part from the benchmark timing.
+
+    Run benchmarks with the go test command: To execute benchmarks, use the go test -bench command followed by a regular expression that matches the benchmark function names. For example, go test -bench=., where . matches all benchmark functions.
+
+    Analyze benchmark results: After running the benchmarks, Go will provide output that includes the execution time and other metrics for each benchmark. Analyze the results to compare the performance of different implementations or optimizations.
+
+    Repeat benchmarks multiple times: Benchmark results can vary between runs due to factors such as CPU load or other system activities. To obtain more reliable results, run the benchmarks multiple times and observe the average or median values.
+
+    Profile your code: Go provides various profiling tools such as go test -benchmem, go tool pprof, and go test -cpuprofile to profile memory usage, CPU performance, and more. Profiling can help identify potential bottlenecks and optimize critical parts of your code.
+
+    Remember that benchmarks provide relative performance comparisons and should be conducted on representative datasets. It's essential to consider the real-world usage scenarios and optimize based on specific requirements rather than solely relying on benchmark results.
+
+    For more detailed information and examples, refer to the official Go documentation on testing and benchmarking: https://golang.org/pkg/testing/
+
+
+[Links]
+1. https://tapajyoti-bose.medium.com/battle-of-the-giants-github-copilot-vs-chatgpt-%EF%B8%8F-%EF%B8%8F-d3ba6c116543
+2. https://teivah.medium.com/how-to-write-accurate-benchmarks-in-go-4266d7dd1a95
+3. https://github.com/01-edu/public/tree/master/subjects/lem-in/audit
 
 [DONE]
 1. Dual CMD. One for CLI. One for web. 
