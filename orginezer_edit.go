@@ -1,4 +1,4 @@
-package usecases
+package usecases_lol
 
 import (
 	"lem-in/internal/entities"
@@ -69,7 +69,7 @@ func (o *output) runAnts(order []*entities.Node, totalAnts int) entities.Queue {
 	return queue
 }
 
-// func (o *output) runAnts2(order []*entities.Node, pathsNum int) entities.Queue {
+// func (o *output) runAntsGOroutine(order []*entities.Node, pathsNum int) entities.Queue {
 // 	totalAnts := len(order)
 // 	queue := make(entities.Queue, totalAnts)
 // 	repetition := 0
@@ -99,5 +99,44 @@ func (o *output) runAnts(order []*entities.Node, totalAnts int) entities.Queue {
 // 	}
 // 	// fmt.Println("queue length (outer loop):", len(queue))
 // 	// fmt.Println("repetitions:", repetition)
+// 	return queue
+// }
+
+// func (o *output) oldRunAnts(order []*entities.Node, totalAnts int) entities.Queue {
+// 	queue := make(entities.Queue, 0)
+
+// 	for {
+// 		var usedPath []*entities.Node
+// 		nilCounter := 0
+// 		step := make(entities.Step, 0)
+// 	Mid:
+// 		for i := 0; i < totalAnts; i++ {
+// 			if order[i] == nil {
+// 				continue
+// 			}
+// 			for _, used := range usedPath {
+// 				if used == order[i] {
+// 					break Mid
+// 				}
+// 			}
+// 			move := entities.Move{
+// 				Ant:         i + 1,
+// 				Destination: order[i].Current.Name,
+// 			}
+// 			usedPath = append(usedPath, order[i])
+// 			order[i] = order[i].Next
+// 			step = append(step, move)
+// 		}
+
+// 		queue = append(queue, step)
+// 		for _, j := range order {
+// 			if j == nil {
+// 				nilCounter++
+// 			}
+// 		}
+// 		if nilCounter == totalAnts {
+// 			break
+// 		}
+// 	}
 // 	return queue
 // }

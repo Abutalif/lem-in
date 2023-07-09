@@ -38,39 +38,31 @@ func (o *output) Schedule(paths []entities.Path, totalAnts int, start *entities.
 // FIXME: unoptimised func
 func (o *output) runAnts(order []*entities.Node, totalAnts int) entities.Queue {
 	queue := make(entities.Queue, 0)
-
-	for {
-		var usedPath []*entities.Node
-		nilCounter := 0
+	nilCounter := 0
+	for nilCounter != totalAnts {
+		usedNodes := make(map[*entities.Node]bool)
+		nilCounter = 0
 		step := make(entities.Step, 0)
-	Mid:
 		for i := 0; i < totalAnts; i++ {
 			if order[i] == nil {
+				nilCounter++
 				continue
 			}
-			for _, used := range usedPath {
-				if used == order[i] {
-					break Mid
-				}
+			if usedNodes[order[i]] {
+				break
 			}
 			move := entities.Move{
 				Ant:         i + 1,
 				Destination: order[i].Current.Name,
 			}
-			usedPath = append(usedPath, order[i])
+			usedNodes[order[i]] = true
 			order[i] = order[i].Next
 			step = append(step, move)
 		}
-
-		queue = append(queue, step)
-		for _, j := range order {
-			if j == nil {
-				nilCounter++
-			}
-		}
-		if nilCounter == totalAnts {
-			break
+		if len(step) != 0 {
+			queue = append(queue, step)
 		}
 	}
+	// return entities.Queue{}
 	return queue
 }
