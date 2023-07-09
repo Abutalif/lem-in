@@ -15,9 +15,6 @@ func NewOrganizer() Organizer {
 }
 
 func (o *output) Schedule(paths []entities.Path, totalAnts int, start *entities.Room) entities.Queue {
-	// for i := range paths {
-	// 	fmt.Println(paths[i].Start.PrintList())
-	// }
 	order := make([]*entities.Node, totalAnts)
 	smallest := &paths[0]
 	for i := len(order) - 1; i >= 0; i-- {
@@ -26,16 +23,15 @@ func (o *output) Schedule(paths []entities.Path, totalAnts int, start *entities.
 				smallest = &paths[j]
 			}
 		}
-		// smallest = o.leastBusyPath(paths)
 		order[i] = smallest.Start.Next
 		smallest.Ants++
 	}
 	queue := o.runAnts(order, totalAnts)
+	// queue := o.PreParrallelRunAnts(order, len(paths))
 
 	return queue
 }
 
-// FIXME: unoptimised func
 func (o *output) runAnts(order []*entities.Node, totalAnts int) entities.Queue {
 	queue := make(entities.Queue, 0)
 	nilCounter := 0
@@ -63,6 +59,30 @@ func (o *output) runAnts(order []*entities.Node, totalAnts int) entities.Queue {
 			queue = append(queue, step)
 		}
 	}
-	// return entities.Queue{}
+	return queue
+}
+
+func (o *output) PreParrallelRunAnts(order []*entities.Node, pathsNum int) entities.Queue {
+	queue := make(entities.Queue, 0)
+	totalAnts := len(order)
+	for i := 0; i < totalAnts; i++ {
+		steps := make(entities.Step, order[i].Len())
+		j := 0
+		for order != nil {
+			move := entities.Move{
+				Ant:         i + 1,
+				Destination: order[i].Current.Name,
+			}
+			order[i] = order[i].Next
+			steps[j] = move
+			j++
+		}
+		if i < len(queue) {
+			queue[i] = steps
+		} else {
+			queue = append(queue, steps)
+		}
+	}
+
 	return queue
 }
