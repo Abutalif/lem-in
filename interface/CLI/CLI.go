@@ -143,7 +143,7 @@ func (c *CLI) solve(colony *entities.Anthill) (entities.Queue, error) {
 }
 
 func (c *CLI) writeResult(queue entities.Queue) {
-	// fmt.Println(c.inout)
+	// fmt.Println(c.inout) //must have!
 	for _, step := range queue {
 		for i, move := range step {
 			fmt.Printf("L%v-%v", move.Ant, move.Destination)

@@ -8,6 +8,9 @@ import (
 type Pathfinder interface {
 	Find(*entities.Anthill) []entities.Path
 }
+type PathMaker interface {
+	Find(*entities.Anthill) []entities.Path
+}
 
 func NewPathfinder(name string) Pathfinder {
 	switch name {
@@ -18,4 +21,7 @@ func NewPathfinder(name string) Pathfinder {
 	}
 }
 
-// TODO: pathfinder chooser
+func FindPath() []entities.Path {
+	// go through goroutines each running one pathfinder
+	return nil
+}

@@ -53,6 +53,20 @@
 2. https://teivah.medium.com/how-to-write-accurate-benchmarks-in-go-4266d7dd1a95
 3. https://github.com/01-edu/public/tree/master/subjects/lem-in/audit
 
+[Notes]
+1. Before optimization:
+    real    0m8.746s
+    user    0m4.843s
+    sys     0m1.269s
+   After optimization:
+    real    0m6.802s
+    user    0m2.908s
+    sys     0m1.299s
+   After optimization 2:
+    real    0m3.141s
+    user    0m3.206s
+    sys     0m0.036s
+
 [DONE]
 1. Dual CMD. One for CLI. One for web. 
 
