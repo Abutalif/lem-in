@@ -1,20 +1,22 @@
 package usecases
 
 import (
+	"fmt"
 	"lem-in/internal/entities"
 )
 
-type Organizer interface {
+type Scheduler interface {
 	Schedule([]entities.Path, int, *entities.Room) entities.Queue
 }
 
-type output struct{}
+type flowMachine struct{}
 
-func NewOrganizer() Organizer {
-	return &output{}
+func NewScheduler() Scheduler {
+	return &flowMachine{}
 }
 
-func (o *output) Schedule(paths []entities.Path, totalAnts int, start *entities.Room) entities.Queue {
+func (f *flowMachine) Schedule(paths []entities.Path, totalAnts int, start *entities.Room) entities.Queue {
+	fmt.Println("CountSteps:", CountSteps(paths, totalAnts))
 	order := make([]*entities.Node, totalAnts)
 	smallest := &paths[0]
 	for i := len(order) - 1; i >= 0; i-- {
@@ -26,13 +28,18 @@ func (o *output) Schedule(paths []entities.Path, totalAnts int, start *entities.
 		order[i] = smallest.Start.Next
 		smallest.Ants++
 	}
-	queue := o.runAnts(order, totalAnts)
+
+	biggest := longestPath(paths) // longest non empty
+	fmt.Println("\nthis is to check hypothesis that")
+	fmt.Println("longest path + num of ants in it -1 is num of steps")
+	fmt.Println("biggest.Len+biggest.Ants", biggest.Len+biggest.Ants-1)
+	queue := f.runAnts(order, totalAnts)
 	// queue := o.PreParrallelRunAnts(order, len(paths))
 
 	return queue
 }
 
-func (o *output) runAnts(order []*entities.Node, totalAnts int) entities.Queue {
+func (f *flowMachine) runAnts(order []*entities.Node, totalAnts int) entities.Queue {
 	queue := make(entities.Queue, 0)
 	nilCounter := 0
 	for nilCounter != totalAnts {
@@ -59,10 +66,12 @@ func (o *output) runAnts(order []*entities.Node, totalAnts int) entities.Queue {
 			queue = append(queue, step)
 		}
 	}
+	fmt.Println("Len of queue:", len(queue))
+	fmt.Println()
 	return queue
 }
 
-func (o *output) PreParrallelRunAnts(order []*entities.Node, pathsNum int) entities.Queue {
+func (f *flowMachine) PreParrallelRunAnts(order []*entities.Node, pathsNum int) entities.Queue {
 	queue := make(entities.Queue, 0)
 	totalAnts := len(order)
 	for i := 0; i < totalAnts; i++ {

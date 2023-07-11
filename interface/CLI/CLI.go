@@ -21,8 +21,7 @@ const (
 
 type CLI struct {
 	builder    usecases.Builder
-	pathfinder usecases.Pathfinder
-	organizer  usecases.Organizer
+	solver     usecases.Solver
 	roomKind   entities.RoomKind
 	readState  byte
 	startFound bool
@@ -33,8 +32,7 @@ type CLI struct {
 func NewCLI() *CLI {
 	return &CLI{
 		builder:    usecases.NewBuilder(),
-		pathfinder: usecases.NewPathfinder("dijkstra"), // will be changeable // dijkstra
-		organizer:  usecases.NewOrganizer(),
+		solver:     usecases.NewSolver(),
 		roomKind:   entities.Regular,
 		readState:  ants,
 		startFound: false,
@@ -130,16 +128,17 @@ func (c *CLI) saveData(filename string) error {
 	return nil
 }
 
+// TODO
 func (c *CLI) solve(colony *entities.Anthill) (entities.Queue, error) {
-	paths := c.pathfinder.Find(colony)
-	if len(paths) < 1 {
-		return nil, errors.New("ERROR: no path found")
-	}
-	// for _, p := range paths {
-	// 	fmt.Println(p.Start.PrintList())
+	// paths := c.pathfinder.Find(colony)
+	// if len(paths) < 1 {
+	// 	return nil, errors.New("ERROR: no path found")
 	// }
-	queue := c.organizer.Schedule(paths, c.builder.Anthill().AntNum, c.builder.Anthill().GetStart())
-	return queue, nil
+	// // for _, p := range paths {
+	// // 	fmt.Println(p.Start.PrintList())
+	// // }
+	// queue := c.organizer.Schedule(paths, c.builder.Anthill().AntNum, c.builder.Anthill().GetStart())
+	return entities.Queue{}, nil
 }
 
 func (c *CLI) writeResult(queue entities.Queue) {

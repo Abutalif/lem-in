@@ -10,7 +10,7 @@ func NewDikjstra() Pathfinder {
 	return &dijkstra{}
 }
 
-func (d *dijkstra) Find(colony *entities.Anthill) []entities.Path {
+func (d *dijkstra) Find(colony entities.Anthill) []entities.Path {
 	paths := make([]entities.Path, 0)
 	start := colony.GetStart()
 	start.StartDist = 0

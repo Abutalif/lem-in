@@ -10,7 +10,7 @@ func NewSimple() Pathfinder {
 	return &simple{}
 }
 
-func (s *simple) Find(colony *entities.Anthill) []entities.Path {
+func (s *simple) Find(colony entities.Anthill) []entities.Path {
 	start := colony.GetStart()
 	s.end = colony.GetEnd()
 	start.Visited = true
