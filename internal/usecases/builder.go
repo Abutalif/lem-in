@@ -28,7 +28,7 @@ func (b *Builder) SetAnts(num int) {
 
 func (b *Builder) CreateRoom(name string, x, y int, kind entities.RoomKind) error {
 	if _, has := b.anthill.Rooms[name]; has {
-		return errors.New("ERROR: repeated rooms")
+		return errors.New("repeated rooms")
 	}
 	newRoom := &entities.Room{
 		Name:        name,
@@ -47,7 +47,7 @@ func (b *Builder) CreateTunnel(roomNames []string) error {
 	room1, has1 := b.anthill.Rooms[roomNames[0]]
 	room2, has2 := b.anthill.Rooms[roomNames[1]]
 	if !has1 || !has2 {
-		return errors.New("ERROR: invalid tunnel info - tunnel to nonexisting room")
+		return errors.New("tunnel to nonexisting room")
 	}
 
 	var existing bool

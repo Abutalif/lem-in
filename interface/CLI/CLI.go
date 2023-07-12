@@ -43,11 +43,11 @@ func NewCLI() *CLI {
 func (c *CLI) Run(filename string) error {
 	var err error
 	if err = c.saveData(filename); err != nil {
-		return err
+		return fmt.Errorf("ERROR: invalid data format, %v", err)
 	}
-	solution, err := c.solve(c.builder.Anthill())
+	solution, err := c.solver.Solve(c.builder.Anthill())
 	if err != nil {
-		return err
+		return fmt.Errorf("ERROR: invalid data format, %v", err)
 	}
 	c.writeResult(solution)
 	return nil
@@ -65,10 +65,10 @@ func (c *CLI) saveData(filename string) error {
 	for fileScan.Scan() {
 		line := fileScan.Text()
 		if len(line) == 0 {
-			return errors.New("ERROR: empty line")
+			return errors.New("empty line")
 		}
 		if strings.Contains(c.inout, line) {
-			return errors.New("ERROR: duplicating input data")
+			return errors.New("duplicating input data")
 		}
 		if strings.HasPrefix(line, "#") {
 			if line == "##start" {
@@ -86,7 +86,7 @@ func (c *CLI) saveData(filename string) error {
 		case ants:
 			num, err := strconv.Atoi(line)
 			if err != nil || num < 1 {
-				return errors.New("ERROR: not valid ants number")
+				return errors.New("not valid ants number")
 			}
 			c.builder.SetAnts(num)
 			c.readState = rooms
@@ -94,7 +94,7 @@ func (c *CLI) saveData(filename string) error {
 			name, x, y, err := c.checkRoomData(line)
 			if err != nil {
 				if err = c.makeTunnel(line); err != nil {
-					return errors.New("ERROR: not a valid room or tunnel info")
+					return err
 				}
 				c.readState = tunnels
 				continue
@@ -115,34 +115,21 @@ func (c *CLI) saveData(filename string) error {
 		case comment:
 			c.readState = prevState
 		default:
-			return fmt.Errorf("ERROR: invalid read mode")
+			return errors.New("invalid read mode")
 		}
 
 		c.inout += line + "\n"
 
 	}
 	if !c.startFound || !c.endFound {
-		return errors.New("ERROR: no data start or end room found")
+		return errors.New("no data start or end room found")
 	}
 
 	return nil
 }
 
-// TODO
-func (c *CLI) solve(colony *entities.Anthill) (entities.Queue, error) {
-	// paths := c.pathfinder.Find(colony)
-	// if len(paths) < 1 {
-	// 	return nil, errors.New("ERROR: no path found")
-	// }
-	// // for _, p := range paths {
-	// // 	fmt.Println(p.Start.PrintList())
-	// // }
-	// queue := c.organizer.Schedule(paths, c.builder.Anthill().AntNum, c.builder.Anthill().GetStart())
-	return entities.Queue{}, nil
-}
-
 func (c *CLI) writeResult(queue entities.Queue) {
-	// fmt.Println(c.inout) //must have!
+	fmt.Println(c.inout)
 	for _, step := range queue {
 		for i, move := range step {
 			fmt.Printf("L%v-%v", move.Ant, move.Destination)
@@ -157,17 +144,17 @@ func (c *CLI) writeResult(queue entities.Queue) {
 func (c *CLI) checkRoomData(line string) (string, int, int, error) {
 	roomData := strings.Fields(line)
 	if len(roomData) != 3 {
-		return "", 0, 0, errors.New("ERROR: invalid room format - wrong number of entries")
+		return "", 0, 0, errors.New("invalid room format - wrong number of entries")
 	}
 
 	x, err := strconv.Atoi(roomData[1])
 	if err != nil {
-		return "", 0, 0, errors.New("ERROR: invalid room format - incorrect x coord")
+		return "", 0, 0, errors.New("invalid room format - incorrect x coord")
 	}
 
 	y, err := strconv.Atoi(roomData[2])
 	if err != nil {
-		return "", 0, 0, errors.New("ERROR: invalid room format - incorrect y coord")
+		return "", 0, 0, errors.New("invalid room format - incorrect y coord")
 	}
 
 	return roomData[0], x, y, nil
@@ -176,7 +163,7 @@ func (c *CLI) checkRoomData(line string) (string, int, int, error) {
 func (c *CLI) makeTunnel(line string) error {
 	roomNames := strings.Split(line, "-")
 	if len(roomNames) != 2 {
-		return errors.New("ERROR: incorrect tunnel info - not 2 rooms")
+		return errors.New("incorrect tunnel info - not 2 rooms")
 	}
 	if err := c.builder.CreateTunnel(roomNames); err != nil {
 		return err
