@@ -2,13 +2,14 @@ package usecases
 
 import (
 	"errors"
+	"fmt"
 
 	"lem-in/internal/entities"
 	"lem-in/internal/usecases/pathfinders"
 )
 
 type Pathfinder interface {
-	Find(entities.Anthill) []entities.Path
+	Find(entities.Anthill) []*entities.Path
 }
 
 type solveMachine struct {
@@ -24,6 +25,7 @@ func NewSolver() Solver {
 	pathMakers := make(map[string]Pathfinder)
 	pathMakers["simple"] = pathfinders.NewSimple()
 	pathMakers["dijkstra"] = pathfinders.NewDikjstra()
+	pathMakers["yens"] = pathfinders.NewYens()
 	return &solveMachine{
 		pathMakers: pathMakers,
 		scheduler:  NewScheduler(),
@@ -31,19 +33,16 @@ func NewSolver() Solver {
 }
 
 func (s *solveMachine) Solve(colony *entities.Anthill) (entities.Queue, error) {
-	paths := s.pathMakers["dijkstra"].Find(*colony)
+	paths := s.pathMakers["yens"].Find(*colony)
+	fmt.Println("Used paths")
+	for _, p := range paths {
+		fmt.Println(p.Start.PrintList())
+	}
+	fmt.Println()
 	if len(paths) < 1 {
 		return entities.Queue{}, errors.New("no path found")
 	}
 	queue := s.scheduler.Schedule(paths, colony.AntNum)
-
-	// the idea is simple
-	// we are doing only simple single threaded approach
-	// no goroutines
-	// I just ask pathfinder to give me paths,
-	// then I ask scheduler to schedule ants it will say wich ant where will move
-	// Then RunAnts will compose a queue of steps
-	// which will be returned by this func
 	return queue, nil
 }
 

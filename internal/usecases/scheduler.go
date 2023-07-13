@@ -5,7 +5,7 @@ import (
 )
 
 type Scheduler interface {
-	Schedule([]entities.Path, int) entities.Queue
+	Schedule([]*entities.Path, int) entities.Queue
 	RunAnts([]*entities.Node, int) entities.Queue
 }
 
@@ -15,13 +15,13 @@ func NewScheduler() Scheduler {
 	return &flowMachine{}
 }
 
-func (f *flowMachine) Schedule(paths []entities.Path, totalAnts int) entities.Queue {
+func (f *flowMachine) Schedule(paths []*entities.Path, totalAnts int) entities.Queue {
 	order := make([]*entities.Node, totalAnts)
-	smallest := &paths[0]
+	smallest := paths[0]
 	for i := len(order) - 1; i >= 0; i-- {
 		for j := range paths {
-			if smallest.Ants+smallest.Len > paths[j].Len+paths[j].Ants && smallest != &paths[j] {
-				smallest = &paths[j]
+			if smallest.Ants+smallest.Len > paths[j].Len+paths[j].Ants && smallest != paths[j] {
+				smallest = paths[j]
 			}
 		}
 		order[i] = smallest.Start.Next

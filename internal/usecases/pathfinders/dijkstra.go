@@ -10,8 +10,8 @@ func NewDikjstra() Pathfinder {
 	return &dijkstra{}
 }
 
-func (d *dijkstra) Find(colony entities.Anthill) []entities.Path {
-	paths := make([]entities.Path, 0)
+func (d *dijkstra) Find(colony entities.Anthill) []*entities.Path {
+	paths := make([]*entities.Path, 0)
 	start := colony.GetStart()
 	start.StartDist = 0
 	d.setDistances(start)
@@ -31,7 +31,7 @@ func (d *dijkstra) Find(colony entities.Anthill) []entities.Path {
 			Ants:  0,
 		}
 
-		paths = append(paths, path)
+		paths = append(paths, &path)
 
 	}
 
@@ -69,5 +69,6 @@ func getRoute(current *entities.Room) *entities.Node {
 			Next:    route,
 		}
 	}
+	// current.Visited = false //this might backfire (I hope it wont)
 	return nil
 }

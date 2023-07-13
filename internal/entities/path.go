@@ -11,6 +11,14 @@ type Node struct {
 	Next    *Node
 }
 
+func (p *Path) Unvisit() {
+	start := p.Start
+	for start != nil {
+		start.Current.Visited = false
+		start = start.Next
+	}
+}
+
 func (n *Node) GetLast() *Node {
 	if n.Next == nil {
 		return n
@@ -22,10 +30,12 @@ func (n *Node) PrintList() string {
 	res := ""
 	start := n
 	for start != nil {
-		res += start.Current.Name + "->"
+		res += start.Current.Name
+		if start.Next != nil {
+			res += "->"
+		}
 		start = start.Next
 	}
-	res += "nil"
 	return res
 }
 
