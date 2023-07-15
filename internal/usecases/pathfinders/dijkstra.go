@@ -19,7 +19,7 @@ func (d *dijkstra) Find(colony entities.Anthill) []*entities.Path {
 	end := colony.GetEnd()
 	end.SortConnByDist()
 	for _, neighbor := range end.Connections {
-		route := getRoute(neighbor)
+		route := d.getRoute(neighbor)
 		if route == nil {
 			continue
 		}
@@ -47,7 +47,7 @@ func (d *dijkstra) setDistances(room *entities.Room) {
 	}
 }
 
-func getRoute(current *entities.Room) *entities.Node {
+func (d *dijkstra) getRoute(current *entities.Room) *entities.Node {
 	if current.StartDist == 0 {
 		return &entities.Node{
 			Current: current,
@@ -60,7 +60,7 @@ func getRoute(current *entities.Room) *entities.Node {
 		if neighbor.Visited || neighbor.StartDist > current.StartDist {
 			continue
 		}
-		route := getRoute(neighbor)
+		route := d.getRoute(neighbor)
 		if route == nil {
 			continue
 		}
@@ -69,6 +69,5 @@ func getRoute(current *entities.Room) *entities.Node {
 			Next:    route,
 		}
 	}
-	// current.Visited = false //this might backfire (I hope it wont)
 	return nil
 }
