@@ -3,7 +3,7 @@ package pathfinders
 import "lem-in/internal/entities"
 
 type Pathfinder interface {
-	Find(entities.Anthill) []*entities.Path
+	Find(*entities.Anthill) []*entities.Path
 }
 
 func SortPaths(paths []*entities.Path) {
@@ -15,4 +15,13 @@ func SortPaths(paths []*entities.Path) {
 			}
 		}
 	}
+}
+
+func MaxPaths(start, end *entities.Room) int {
+	startConns := len(start.Connections)
+	endConns := len(end.Connections)
+	if startConns < endConns {
+		return startConns
+	}
+	return endConns
 }

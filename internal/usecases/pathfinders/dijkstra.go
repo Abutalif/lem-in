@@ -10,15 +10,16 @@ func NewDikjstra() Pathfinder {
 	return &dijkstra{}
 }
 
-func (d *dijkstra) Find(colony entities.Anthill) []*entities.Path {
+func (d *dijkstra) Find(colony *entities.Anthill) []*entities.Path {
 	paths := make([]*entities.Path, 0)
 	start := colony.GetStart()
 	start.StartDist = 0
 	d.setDistances(start)
 
 	end := colony.GetEnd()
-	end.SortConnByDist()
-	for _, neighbor := range end.Connections {
+	end.Visited = true
+	sortedNeighbors := end.SortConnByDist()
+	for _, neighbor := range sortedNeighbors {
 		route := d.getRoute(neighbor)
 		if route == nil {
 			continue
@@ -32,16 +33,15 @@ func (d *dijkstra) Find(colony entities.Anthill) []*entities.Path {
 		}
 
 		paths = append(paths, &path)
-
 	}
 
 	return paths
 }
 
 func (d *dijkstra) setDistances(room *entities.Room) {
-	for _, neighbor := range room.Connections {
-		if neighbor.StartDist > room.StartDist {
-			neighbor.StartDist = room.StartDist + 1
+	for neighbor, cost := range room.Connections {
+		if neighbor.StartDist > room.StartDist+cost {
+			neighbor.StartDist = room.StartDist + cost
 			d.setDistances(neighbor)
 		}
 	}
@@ -54,9 +54,10 @@ func (d *dijkstra) getRoute(current *entities.Room) *entities.Node {
 			Next:    nil,
 		}
 	}
-	current.SortConnByDist()
+	// current.SortConnByDist()
 	current.Visited = true
-	for _, neighbor := range current.Connections {
+	sortedNeighbors := current.SortConnByDist()
+	for _, neighbor := range sortedNeighbors {
 		if neighbor.Visited || neighbor.StartDist > current.StartDist {
 			continue
 		}

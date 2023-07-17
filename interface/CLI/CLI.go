@@ -54,6 +54,11 @@ func (c *CLI) Run(filename string) error {
 }
 
 func (c *CLI) saveData(filename string) error {
+	filecontent, err := os.ReadFile(filename)
+	if err != nil {
+		return err
+	}
+	c.inout = string(filecontent) + "\n"
 	file, err := os.Open(filename)
 	if err != nil {
 		return err
@@ -66,9 +71,6 @@ func (c *CLI) saveData(filename string) error {
 		line := fileScan.Text()
 		if len(line) == 0 {
 			return errors.New("empty line")
-		}
-		if strings.Contains(c.inout, line) {
-			return errors.New("duplicating input data")
 		}
 		if strings.HasPrefix(line, "#") {
 			if line == "##start" {
@@ -118,8 +120,6 @@ func (c *CLI) saveData(filename string) error {
 			return errors.New("invalid read mode")
 		}
 
-		c.inout += line + "\n"
-
 	}
 	if !c.startFound || !c.endFound {
 		return errors.New("no data start or end room found")
@@ -139,6 +139,7 @@ func (c *CLI) writeResult(queue entities.Queue) {
 		}
 		fmt.Println()
 	}
+	// fmt.Println("num of steps", len(queue))
 }
 
 func (c *CLI) checkRoomData(line string) (string, int, int, error) {

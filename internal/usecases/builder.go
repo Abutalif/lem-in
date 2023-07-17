@@ -37,7 +37,7 @@ func (b *Builder) CreateRoom(name string, x, y int, kind entities.RoomKind) erro
 		Y:           y,
 		Kind:        kind,
 		StartDist:   entities.Infinity,
-		Connections: make([]*entities.Room, 0),
+		Connections: make(map[*entities.Room]uint),
 	}
 	b.anthill.Rooms[name] = newRoom
 	return nil
@@ -48,6 +48,10 @@ func (b *Builder) CreateTunnel(roomNames []string) error {
 	room2, has2 := b.anthill.Rooms[roomNames[1]]
 	if !has1 || !has2 {
 		return errors.New("tunnel to nonexisting room")
+	}
+
+	if room1 == room2 {
+		return nil
 	}
 
 	var existing bool
@@ -61,8 +65,8 @@ func (b *Builder) CreateTunnel(roomNames []string) error {
 		return nil
 	}
 
-	room1.Connections = append(room1.Connections, room2)
-	room2.Connections = append(room2.Connections, room1)
+	room1.Connections[room2] = 1
+	room2.Connections[room1] = 1
 
 	return nil
 }

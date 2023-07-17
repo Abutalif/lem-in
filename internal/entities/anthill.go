@@ -55,12 +55,13 @@ func (a *Anthill) Show() string {
 		}
 		res += val.Name + " - " + kind + " - startDist:" + strconv.Itoa(int(val.StartDist)) + visited + "\n"
 		res += "Connections:\n"
-		for i, cons := range val.Connections {
-			res += cons.Name
-			if i < len(val.Connections)-1 {
+		i := 0
+		for room := range val.Connections {
+			res += room.Name
+			if i < len(val.Connections) {
 				res += ", "
 			}
-
+			i++
 		}
 		res += "\n\n"
 	}

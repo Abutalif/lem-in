@@ -10,12 +10,12 @@ func NewSimple() Pathfinder {
 	return &simple{}
 }
 
-func (s *simple) Find(colony entities.Anthill) []*entities.Path {
+func (s *simple) Find(colony *entities.Anthill) []*entities.Path {
 	start := colony.GetStart()
 	s.end = colony.GetEnd()
 	start.Visited = true
 	paths := make([]*entities.Path, 0)
-	for _, afterStart := range start.Connections {
+	for afterStart := range start.Connections {
 		if !afterStart.Visited {
 			route := s.checkNeighbors(afterStart)
 			if route != nil {
@@ -42,7 +42,7 @@ func (s *simple) checkNeighbors(current *entities.Room) *entities.Node {
 		}
 	}
 	current.Visited = true
-	for _, neighbor := range current.Connections {
+	for neighbor := range current.Connections {
 		if !neighbor.Visited {
 			route := s.checkNeighbors(neighbor)
 			if route == nil {
